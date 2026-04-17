@@ -1,0 +1,59 @@
+============================================================
+              SECUREFLOW SECURITY REPORT
+============================================================
+
+1. EXECUTIVE SUMMARY
+------------------------------------------------------------
+This report presents the results of an automated security assessment
+performed using SecureFlow. The assessment includes static analysis,
+dynamic scanning, and HTTP security header evaluation.
+
+2. SCOPE
+------------------------------------------------------------
+SAST Target : C:\Users\Shriem\Desktop\SecureFlow
+DAST Target : https://pentest-ground.com:4280/
+Scan Type   : SAST + DAST
+
+3. SEVERITY OVERVIEW
+------------------------------------------------------------
+HIGH   : 0
+MEDIUM : 6
+LOW    : 0
+ERROR  : 1
+
+4. FINDINGS
+------------------------------------------------------------
+
+4.1 SAST Findings (Semgrep)
+----------------------------------------
+1. [ERROR] Found 'subprocess' function 'run' with 'shell=True'. This is dangerous because this call will spawn the command using a shell process. Doing so propagates current shell settings and variables, which makes it much easier for a malicious actor to execute commands. Use 'shell=False' instead.
+   Rule ID: python.lang.security.audit.subprocess-shell-true.subprocess-shell-true
+
+
+4.2 HTTP Security Headers Analysis
+----------------------------------------
+[MEDIUM] Missing Content-Security-Policy - Prevents XSS attacks
+[MEDIUM] Missing X-Frame-Options - Prevents clickjacking
+[MEDIUM] Missing X-Content-Type-Options - Prevents MIME sniffing
+[MEDIUM] Missing Strict-Transport-Security - Enforces HTTPS
+[MEDIUM] Missing Referrer-Policy - Controls referrer info
+[MEDIUM] Missing Permissions-Policy - Restricts browser features
+
+5. DAST SUMMARY
+------------------------------------------------------------
+ZAP scan executed successfully.
+Detailed findings are available in the HTML report:
+C:\Users\Shriem\Desktop\SecureFlow\zap_report.html
+
+6. RECOMMENDATIONS
+------------------------------------------------------------
+- Avoid using subprocess with shell=True.
+- Implement Content-Security-Policy header.
+- Enable X-Frame-Options to prevent clickjacking.
+- Configure Strict-Transport-Security for HTTPS enforcement.
+- Regularly perform security scans during development.
+
+7. CONCLUSION
+------------------------------------------------------------
+The assessment identified 7 potential security issues.
+Timely remediation is recommended before production deployment.

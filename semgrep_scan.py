@@ -1,24 +1,28 @@
 import subprocess
 import json
 
-def run_semgrep():
+def run_semgrep(target_path):
     try:
         result = subprocess.run(
-            ["semgrep", "scan", "--config", "p/python", "--json", "--quiet"],
+            [
+                "semgrep",
+                "scan",
+                "--config", "p/python",
+                "--json",
+                "--quiet",
+                target_path
+            ],
             capture_output=True,
-            text=True
+            text=True,
+            encoding="utf-8"
         )
 
-        # Try stdout first, then stderr
-        output = result.stdout.strip() if result.stdout.strip() else result.stderr.strip()
+        output = result.stdout.strip()
 
         if not output:
-            return [{"error": "No output from semgrep"}]
+            return []
 
-        try:
-            data = json.loads(output)
-        except:
-            return [{"error": "Invalid JSON", "raw": output[:300]}]
+        data = json.loads(output)
 
         findings = []
 
