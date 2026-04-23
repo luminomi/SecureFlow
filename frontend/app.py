@@ -1,9 +1,16 @@
 from flask import Flask, render_template, request, jsonify
+import sys
+
 import os
-from semgrep_scan import run_semgrep
-from zap_scan import run_zap
-from headers_check import check_headers
-from report import generate_report_data
+
+# Add parent directory to sys.path to allow importing from backend
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from backend.semgrep_scan import run_semgrep
+from backend.zap_scan import run_zap
+from backend.headers_check import check_headers
+from backend.report import generate_report_data
+
 
 app = Flask(__name__)
 
