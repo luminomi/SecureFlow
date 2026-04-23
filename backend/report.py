@@ -122,7 +122,8 @@ def generate_report(code_path, url, semgrep_results, zap_report_path, header_dat
     print(f"[+] Text report generated: {txt_report}")
 
     # 4. Generate dashboard
-    from backend.dashboard import generate_dashboard
+    from dashboard import generate_dashboard
+
     generate_dashboard(url, semgrep_results, header_data, zap_report_path)
 
     return txt_report

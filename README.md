@@ -6,19 +6,19 @@
 
 - **`backend/`**: Core scanning logic and CLI tool.
   - `main.py`: CLI entry point.
-  - `semgrep_scan.py`, `zap_scan.py`, `headers_check.py`: Scanning modules.
-  - `report.py`, `dashboard.py`: Reporting and visualization.
-- **`frontend/`**: Web application.
-  - `app.py`: Flask server.
-  - `templates/`: Web UI templates (Dashboard, Reports History, Details, Documentation).
-- **`Reports/`**: Directory where all generated text reports are stored.
+  - `semgrep_scan.py`, `zap_scan.py`, `headers_check.py`: Multi-platform scanning engines.
+  - `report.py`, `dashboard.py`: Reporting logic and refined HTML dashboard.
+- **`frontend/`**: Modern web application.
+  - `app.py`: Flask server with scan history and report viewer.
+  - `templates/`: Professional UI templates (Dashboard, History, Documentation).
+- **`Reports/`**: Centralized storage for all generated security reports.
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 1. **Python 3.8+**
 2. **Semgrep CLI**: `pip install semgrep`
-3. **OWASP ZAP**: [Download and install](https://www.zaproxy.org/download/).
+3. **OWASP ZAP**: [Download and install](https://www.zaproxy.org/download/). (Supports macOS, Windows, and Linux)
 
 ### Installation
 ```bash
@@ -30,27 +30,26 @@ pip install -r requirements.txt
 ## 🖥️ Usage
 
 ### 1. Web Interface (Recommended)
-Start the web server from the root directory:
+Launch the interactive dashboard:
 ```bash
 python3 frontend/app.py
 ```
 Navigate to `http://127.0.0.1:5000` to:
-- Run new scans (SAST, DAST, or Both).
-- **Scan History**: Browse and search through your historical scan results.
-- **Documentation**: Access the built-in documentation page at `/docs`.
+- **Execute Scans**: Run SAST, DAST, or unified assessments.
+- **Browse History**: Access the `/reports` portal to view past findings.
+- **Review Docs**: Detailed tool documentation available at `/docs`.
 
 ### 2. Command Line Interface (CLI)
-Run the core scanner from the `backend` directory:
+Run the scanner via terminal:
 ```bash
 cd backend
 python3 main.py
 ```
 
-## 📊 Features
-- **Centralized Reporting**: All scan results are automatically organized into the `Reports/` folder.
-- **Dynamic Analysis**: Full integration with OWASP ZAP for live site scanning.
-- **Static Analysis**: Deep source code scanning using Semgrep rules.
-- **Security Headers**: Comprehensive check for HTTP security best practices.
+## 📊 Core Capabilities
+- **Cross-Platform Support**: Optimized for macOS, Windows, and Linux environments.
+- **Smart Reporting**: Automatically aggregates findings into a sleek, responsive HTML dashboard.
+- **Deep Scanning**: Utilizes Semgrep's powerful engine for source code analysis and OWASP ZAP for dynamic site testing.
 
 ## ⚖️ License
 MIT License.
