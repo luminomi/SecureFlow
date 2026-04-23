@@ -111,9 +111,22 @@ def generate_report(code_path, url, semgrep_results, zap_report_path, header_dat
     # 1. Prepare data structure
     report_data = generate_report_data(semgrep_results, zap_report_path)
     
-    # 2. Add header findings to report data (if not already there)
+    # 2. Add header findings to report data and include them in summary counts
     if header_data:
         report_data["headers"] = header_data
+        for h in header_data.get("findings", []):
+            sev = (h.get("severity") or "").upper()
+            if sev == "HIGH":
+                report_data["summary"]["high"] += 1
+            elif sev == "MEDIUM":
+                report_data["summary"]["medium"] += 1
+            else:
+                report_data["summary"]["low"] += 1
+        report_data["summary"]["total"] = (
+            report_data["summary"]["high"]
+            + report_data["summary"]["medium"]
+            + report_data["summary"]["low"]
+        )
 
     # 3. Generate text report
     reports_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "Reports")
