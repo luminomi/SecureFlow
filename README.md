@@ -10,7 +10,8 @@
   - `report.py`, `dashboard.py`: Reporting and visualization.
 - **`frontend/`**: Web application.
   - `app.py`: Flask server.
-  - `templates/`: Web UI templates (Dashboard, Reports History, Details).
+  - `templates/`: Web UI templates (Dashboard, Reports History, Details, Documentation).
+- **`Reports/`**: Directory where all generated text reports are stored.
 
 ## 🚀 Getting Started
 
@@ -34,9 +35,9 @@ Start the web server from the root directory:
 python3 frontend/app.py
 ```
 Navigate to `http://127.0.0.1:5000` to:
-- Run new scans.
-- View real-time results.
-- **Browse Scan History**: Access historical reports and detailed findings.
+- Run new scans (SAST, DAST, or Both).
+- **Scan History**: Browse and search through your historical scan results.
+- **Documentation**: Access the built-in documentation page at `/docs`.
 
 ### 2. Command Line Interface (CLI)
 Run the core scanner from the `backend` directory:
@@ -45,10 +46,11 @@ cd backend
 python3 main.py
 ```
 
-## 📝 Roadmap
-- [ ] Export reports to PDF/JSON.
-- [ ] Support for JS, Go, and Ruby SAST.
-- [ ] GitHub Actions integration.
+## 📊 Features
+- **Centralized Reporting**: All scan results are automatically organized into the `Reports/` folder.
+- **Dynamic Analysis**: Full integration with OWASP ZAP for live site scanning.
+- **Static Analysis**: Deep source code scanning using Semgrep rules.
+- **Security Headers**: Comprehensive check for HTTP security best practices.
 
 ## ⚖️ License
 MIT License.

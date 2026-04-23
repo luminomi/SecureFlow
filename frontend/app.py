@@ -14,8 +14,8 @@ from backend.dashboard import generate_dashboard
 
 app = Flask(__name__)
 
-# Root of the SecureFlow project — where reports are saved
-REPORTS_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+REPORTS_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "Reports")
+os.makedirs(REPORTS_DIR, exist_ok=True)
 
 
 def _parse_report_meta(filepath):
@@ -53,10 +53,12 @@ def index():
         semgrep_results = []
         zap_result      = {}
         header_data     = {}
+        sast_ran        = False
 
         if scan_type in ["sast", "both"] and code_path:
             print(f"[+] Running SAST on {code_path}")
             semgrep_results = run_semgrep(code_path)
+            sast_ran = True
 
         if scan_type in ["dast", "both"] and url:
             if not url.startswith("http"):
@@ -67,6 +69,7 @@ def index():
             header_data = check_headers(url)
 
         result = generate_report_data(semgrep_results, zap_result.get("report", "N/A"))
+        result["sast_ran"] = sast_ran
 
         if header_data:
             result["headers"] = header_data
@@ -112,6 +115,11 @@ def view_report(filename):
     meta = _parse_report_meta(filepath)
     return render_template("report_detail.html", filename=filename,
                            content=content, meta=meta)
+
+
+@app.route("/docs")
+def docs():
+    return render_template("docs.html")
 
 
 if __name__ == "__main__":

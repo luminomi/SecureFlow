@@ -7,8 +7,12 @@ def generate_report_data(semgrep_results, zap_report_path):
 
     # ---- SAST ----
     sast = []
+    sast_error = None
     if semgrep_results:
         for i in semgrep_results:
+            if "error" in i:
+                sast_error = i["error"]
+                continue
             sev_raw = (i.get("severity") or "").upper()
             if sev_raw == "ERROR":
                 sev = "HIGH"; high += 1
@@ -37,6 +41,7 @@ def generate_report_data(semgrep_results, zap_report_path):
             "low": low
         },
         "sast": sast,
+        "sast_error": sast_error,
         "dast": dast
     }
     return report
@@ -46,6 +51,7 @@ def generate_text_report(report, code_path, url, output_dir=None):
     ts = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
     fname = f"report_{ts}.txt"
     if output_dir:
+        os.makedirs(output_dir, exist_ok=True)
         fname = os.path.join(output_dir, fname)
 
     lines = []
@@ -100,7 +106,9 @@ def generate_report(code_path, url, semgrep_results, zap_report_path, header_dat
         report_data["headers"] = header_data
 
     # 3. Generate text report
-    txt_report = generate_text_report(report_data, code_path, url)
+    reports_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "Reports")
+    os.makedirs(reports_dir, exist_ok=True)
+    txt_report = generate_text_report(report_data, code_path, url, output_dir=reports_dir)
     print(f"[+] Text report generated: {txt_report}")
 
     # 4. Generate dashboard

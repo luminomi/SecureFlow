@@ -7,9 +7,8 @@ def run_semgrep(target_path):
             [
                 "semgrep",
                 "scan",
-                "--config", "p/python",
+                "--config", "auto",
                 "--json",
-                "--quiet",
                 target_path
             ],
             capture_output=True,
@@ -20,12 +19,13 @@ def run_semgrep(target_path):
         output = result.stdout.strip()
 
         if not output:
-            return []
+            stderr = result.stderr.strip()
+            error_msg = stderr if stderr else f"semgrep exited with code {result.returncode} and no output"
+            return [{"error": error_msg}]
 
         data = json.loads(output)
 
         findings = []
-
         for res in data.get("results", []):
             findings.append({
                 "rule_id": res.get("check_id"),

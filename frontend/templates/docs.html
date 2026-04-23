@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Docs &mdash; SecureFlow</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg:        #fafafa;
+            --surface:   #ffffff;
+            --border:    #e5e7eb;
+            --fg:        #111827;
+            --fg-2:      #6b7280;
+            --fg-3:      #9ca3af;
+            --code-bg:   #f3f4f6;
+            --high:      #991b1b;
+            --medium:    #92400e;
+            --low:       #14532d;
+            --sidebar-w: 220px;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg);
+            color: var(--fg);
+            min-height: 100vh;
+            font-size: 14px;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ── Header ── */
+        header {
+            height: 56px;
+            padding: 0 32px;
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .wordmark {
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            color: var(--fg);
+            text-decoration: none;
+        }
+
+        .nav-links { display: flex; gap: 4px; }
+
+        .nav-link {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--fg-2);
+            padding: 5px 10px;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: color 0.1s, background 0.1s;
+        }
+
+        .nav-link:hover  { color: var(--fg); background: var(--bg); }
+        .nav-link.active { color: var(--fg); background: var(--bg); }
+
+        .header-right {
+            margin-left: auto;
+            font-size: 12px;
+            color: var(--fg-3);
+        }
+
+        /* ── Layout ── */
+        .layout {
+            display: flex;
+            max-width: 1040px;
+            margin: 0 auto;
+            padding: 0 32px;
+            gap: 48px;
+        }
+
+        /* ── Sidebar ── */
+        .sidebar {
+            width: var(--sidebar-w);
+            flex-shrink: 0;
+            padding: 40px 0 80px;
+            position: sticky;
+            top: 56px;
+            height: calc(100vh - 56px);
+            overflow-y: auto;
+        }
+
+        .sidebar-group { margin-bottom: 28px; }
+
+        .sidebar-group-label {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.07em;
+            text-transform: uppercase;
+            color: var(--fg-3);
+            margin-bottom: 6px;
+            padding-left: 8px;
+        }
+
+        .sidebar-link {
+            display: block;
+            font-size: 13px;
+            color: var(--fg-2);
+            text-decoration: none;
+            padding: 5px 8px;
+            border-radius: 6px;
+            transition: color 0.1s, background 0.1s;
+            line-height: 1.4;
+        }
+
+        .sidebar-link:hover  { color: var(--fg); background: var(--border); }
+        .sidebar-link.active { color: var(--fg); font-weight: 500; background: var(--border); }
+
+        /* ── Content ── */
+        .content {
+            flex: 1;
+            min-width: 0;
+            padding: 48px 0 96px;
+        }
+
+        /* ── Sections ── */
+        .doc-section {
+            margin-bottom: 56px;
+            scroll-margin-top: 72px;
+        }
+
+        .doc-section h2 {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.4px;
+            color: var(--fg);
+            margin-bottom: 8px;
+        }
+
+        .doc-section .lead {
+            font-size: 14px;
+            color: var(--fg-2);
+            margin-bottom: 24px;
+            line-height: 1.65;
+        }
+
+        .doc-section h3 {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--fg);
+            margin: 28px 0 10px;
+        }
+
+        .doc-section p {
+            font-size: 14px;
+            color: var(--fg-2);
+            line-height: 1.7;
+            margin-bottom: 12px;
+        }
+
+        .doc-section ul, .doc-section ol {
+            padding-left: 20px;
+            color: var(--fg-2);
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .doc-section li { margin-bottom: 4px; }
+
+        .doc-section a {
+            color: var(--fg);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            text-decoration-color: var(--border);
+        }
+
+        .doc-section a:hover { text-decoration-color: var(--fg); }
+
+        /* ── Divider ── */
+        .doc-section hr {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 32px 0;
+        }
+
+        /* ── Code ── */
+        code {
+            font-family: 'SF Mono', 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+            font-size: 12.5px;
+            background: var(--code-bg);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 1px 6px;
+            color: var(--fg);
+        }
+
+        pre {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 18px 20px;
+            overflow-x: auto;
+            margin: 14px 0;
+        }
+
+        pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            font-size: 12.5px;
+            line-height: 1.7;
+            color: var(--fg);
+        }
+
+        /* ── Route table ── */
+        .route-table {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 14px 0;
+        }
+
+        .route-row {
+            display: grid;
+            grid-template-columns: 80px 220px 1fr;
+            gap: 0;
+            padding: 13px 18px;
+            border-bottom: 1px solid var(--border);
+            align-items: baseline;
+            font-size: 13px;
+        }
+
+        .route-row:last-child { border-bottom: none; }
+
+        .method {
+            font-family: 'SF Mono', monospace;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+        }
+
+        .method-get  { color: #1d4ed8; }
+        .method-post { color: #047857; }
+
+        .route-path {
+            font-family: 'SF Mono', monospace;
+            font-size: 12.5px;
+            color: var(--fg);
+        }
+
+        .route-desc { color: var(--fg-2); }
+
+        /* ── Data shape card ── */
+        .data-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 14px 0;
+        }
+
+        .data-card-header {
+            padding: 10px 18px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--fg-3);
+            background: var(--bg);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .data-card pre {
+            border: none;
+            border-radius: 0;
+            margin: 0;
+            padding: 16px 18px;
+        }
+
+        /* ── Template table ── */
+        .tmpl-table {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 14px 0;
+        }
+
+        .tmpl-row {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            padding: 13px 18px;
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+            align-items: baseline;
+        }
+
+        .tmpl-row:last-child { border-bottom: none; }
+
+        .tmpl-name {
+            font-family: 'SF Mono', monospace;
+            font-size: 12.5px;
+            color: var(--fg);
+        }
+
+        .tmpl-desc { color: var(--fg-2); }
+
+        /* ── Callout ── */
+        .callout {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 8px;
+            padding: 14px 16px;
+            font-size: 13px;
+            color: #1e40af;
+            margin: 16px 0;
+            line-height: 1.6;
+        }
+
+        .callout strong { font-weight: 600; }
+
+        /* ── Severity reference ── */
+        .sev-ref {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 14px 0;
+        }
+
+        .sev-row {
+            display: grid;
+            grid-template-columns: 90px 140px 1fr;
+            padding: 12px 18px;
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+            align-items: center;
+        }
+
+        .sev-row:last-child { border-bottom: none; }
+
+        .tag {
+            display: inline-block;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            padding: 2px 7px;
+            border-radius: 5px;
+            border: 1px solid;
+        }
+
+        .tag-high   { background:#fef2f2; border-color:#fecaca; color:#991b1b; }
+        .tag-medium { background:#fffbeb; border-color:#fde68a; color:#92400e; }
+        .tag-low    { background:#f0fdf4; border-color:#bbf7d0; color:#14532d; }
+        .tag-error  { background:#fdf4ff; border-color:#e9d5ff; color:#6b21a8; }
+        .tag-info   { background:#eff6ff; border-color:#bfdbfe; color:#1e40af; }
+
+        .sev-source { font-family: 'SF Mono', monospace; font-size: 12px; color: var(--fg-2); }
+        .sev-detail { color: var(--fg-2); }
+
+        @media (max-width: 768px) {
+            .layout { flex-direction: column; padding: 0 16px; gap: 0; }
+            .sidebar { display: none; }
+            .content { padding: 28px 0 64px; }
+            header { padding: 0 16px; }
+            .nav-links { display: none; }
+            .route-row { grid-template-columns: 1fr; gap: 3px; }
+            .tmpl-row  { grid-template-columns: 1fr; gap: 3px; }
+            .sev-row   { grid-template-columns: 80px 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="/" class="wordmark">SecureFlow</a>
+    <nav class="nav-links">
+        <a href="/"        class="nav-link">Scanner</a>
+        <a href="/reports" class="nav-link">Reports</a>
+        <a href="/docs"    class="nav-link active">Docs</a>
+    </nav>
+    <span class="header-right">v1.0</span>
+</header>
+
+<div class="layout">
+
+    <!-- ── Sidebar ── -->
+    <aside class="sidebar">
+        <div class="sidebar-group">
+            <div class="sidebar-group-label">Getting started</div>
+            <a href="#overview"     class="sidebar-link active">Overview</a>
+            <a href="#running"      class="sidebar-link">Running the app</a>
+            <a href="#prerequisites" class="sidebar-link">Prerequisites</a>
+        </div>
+        <div class="sidebar-group">
+            <div class="sidebar-group-label">Frontend</div>
+            <a href="#routes"    class="sidebar-link">Routes</a>
+            <a href="#templates" class="sidebar-link">Templates</a>
+            <a href="#scan-form" class="sidebar-link">Scan form</a>
+        </div>
+        <div class="sidebar-group">
+            <div class="sidebar-group-label">Data</div>
+            <a href="#scan-types"  class="sidebar-link">Scan types</a>
+            <a href="#result-shape" class="sidebar-link">Result object</a>
+            <a href="#severity"    class="sidebar-link">Severity levels</a>
+        </div>
+        <div class="sidebar-group">
+            <div class="sidebar-group-label">Reports</div>
+            <a href="#reports-overview" class="sidebar-link">How reports work</a>
+            <a href="#report-format"    class="sidebar-link">Report format</a>
+        </div>
+    </aside>
+
+    <!-- ── Content ── -->
+    <main class="content">
+
+        <!-- Overview -->
+        <section class="doc-section" id="overview">
+            <h2>Overview</h2>
+            <p class="lead">
+                SecureFlow is a web-based security scanning tool built with Flask.
+                It combines static code analysis (SAST via Semgrep), dynamic application testing
+                (DAST via OWASP ZAP), and HTTP security header inspection into a single interface.
+            </p>
+            <p>
+                The frontend lives in <code>frontend/</code> and serves three pages: a scanner, a reports list,
+                and this documentation. All scan results are rendered server-side using Jinja2 templates
+                and stored as <code>.txt</code> report files in the project root.
+            </p>
+            <div class="callout">
+                <strong>Note:</strong> The templates use Jinja2 syntax (<code>{% ... %}</code>, <code>{{ ... }}</code>)
+                and will only render correctly when served through Flask at
+                <code>http://127.0.0.1:5000</code> — not when opened directly as a static file.
+            </div>
+        </section>
+
+        <hr style="border:none;border-top:1px solid var(--border);margin-bottom:56px">
+
+        <!-- Running -->
+        <section class="doc-section" id="running">
+            <h2>Running the app</h2>
+            <p class="lead">Start the Flask development server from the project root.</p>
+
+            <h3>From the project root</h3>
+<pre><code>cd SecureFlow
+python frontend/app.py</code></pre>
+
+            <p>The app starts on <code>http://127.0.0.1:5000</code> with debug mode enabled.</p>
+
+            <h3>With a virtual environment</h3>
+<pre><code>cd SecureFlow/frontend
+source myenv/bin/activate       # macOS / Linux
+myenv\Scripts\activate          # Windows
+
+python app.py</code></pre>
+
+            <div class="callout">
+                <strong>Working directory matters.</strong> Always run from the project root so that
+                <code>REPORTS_DIR</code> resolves correctly and report files are saved alongside
+                existing <code>report_*.txt</code> files.
+            </div>
+        </section>
+
+        <!-- Prerequisites -->
+        <section class="doc-section" id="prerequisites">
+            <h2>Prerequisites</h2>
+            <p class="lead">The following tools must be installed and accessible on your <code>PATH</code> for scans to run.</p>
+
+            <div class="tmpl-table">
+                <div class="tmpl-row">
+                    <span class="tmpl-name">Python 3.9+</span>
+                    <span class="tmpl-desc">Runtime for Flask and all backend modules</span>
+                </div>
+                <div class="tmpl-row">
+                    <span class="tmpl-name">Flask</span>
+                    <span class="tmpl-desc">Web framework — <code>pip install flask</code></span>
+                </div>
+                <div class="tmpl-row">
+                    <span class="tmpl-name">Semgrep</span>
+                    <span class="tmpl-desc">SAST engine — <code>pip install semgrep</code></span>
+                </div>
+                <div class="tmpl-row">
+                    <span class="tmpl-name">OWASP ZAP</span>
+                    <span class="tmpl-desc">DAST engine — must be running with API access enabled</span>
+                </div>
+                <div class="tmpl-row">
+                    <span class="tmpl-name">requests</span>
+                    <span class="tmpl-desc">HTTP client for header checks — <code>pip install requests</code></span>
+                </div>
+            </div>
+        </section>
+
+        <hr style="border:none;border-top:1px solid var(--border);margin-bottom:56px">
+
+        <!-- Routes -->
+        <section class="doc-section" id="routes">
+            <h2>Routes</h2>
+            <p class="lead">The app exposes three URL routes, all defined in <code>frontend/app.py</code>.</p>
+
+            <div class="route-table">
+                <div class="route-row">
+                    <span class="method method-get">GET</span>
+                    <span class="route-path">/</span>
+                    <span class="route-desc">Renders the scanner form with no results</span>
+                </div>
+                <div class="route-row">
+                    <span class="method method-post">POST</span>
+                    <span class="route-path">/</span>
+                    <span class="route-desc">Runs the scan, saves a report, and re-renders with results</span>
+                </div>
+                <div class="route-row">
+                    <span class="method method-get">GET</span>
+                    <span class="route-path">/reports</span>
+                    <span class="route-desc">Lists all <code>report_*.txt</code> files sorted newest first</span>
+                </div>
+                <div class="route-row">
+                    <span class="method method-get">GET</span>
+                    <span class="route-path">/reports/&lt;filename&gt;</span>
+                    <span class="route-desc">Shows summary stats and full content of one report</span>
+                </div>
+                <div class="route-row">
+                    <span class="method method-get">GET</span>
+                    <span class="route-path">/docs</span>
+                    <span class="route-desc">This documentation page</span>
+                </div>
+            </div>
+
+            <p>
+                The <code>/reports/&lt;filename&gt;</code> route validates the filename against
+                <code>report_\d{{8}}_\d{{6}}\.txt</code> before serving, returning 404 for
+                anything that does not match.
+            </p>
+        </section>
+
+        <!-- Templates -->
+        <section class="doc-section" id="templates">
+            <h2>Templates</h2>
+            <p class="lead">All templates live in <code>frontend/templates/</code> and share the same Inter font, colour variables, and header component.</p>
+
+            <div class="tmpl-table">
+                <div class="tmpl-row">
+                    <span class="tmpl-name">index.html</span>
+                    <span class="tmpl-desc">Scanner form and inline scan results. Receives the <code>result</code> context variable after a POST.</span>
+                </div>
+                <div class="tmpl-row">
+                    <span class="tmpl-name">reports.html</span>
+                    <span class="tmpl-desc">Report list table. Receives a <code>reports</code> list — each item has <code>filename</code>, <code>datetime</code>, and <code>meta</code>.</span>
+                </div>
+                <div class="tmpl-row">
+                    <span class="tmpl-name">report_detail.html</span>
+                    <span class="tmpl-desc">Single report view. Receives <code>filename</code>, <code>content</code> (raw text), and <code>meta</code> (parsed counts).</span>
+                </div>
+                <div class="tmpl-row">
+                    <span class="tmpl-name">docs.html</span>
+                    <span class="tmpl-desc">This page. Static — receives no context variables from Flask.</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Scan form -->
+        <section class="doc-section" id="scan-form">
+            <h2>Scan form</h2>
+            <p class="lead">The scanner form on <code>/</code> submits three fields via <code>POST</code>.</p>
+
+            <div class="tmpl-table">
+                <div class="tmpl-row">
+                    <span class="tmpl-name">code_path</span>
+                    <span class="tmpl-desc">Absolute path to a local codebase. Used when scan type is <code>sast</code> or <code>both</code>. Ignored if empty.</span>
+                </div>
+                <div class="tmpl-row">
+                    <span class="tmpl-name">url</span>
+                    <span class="tmpl-desc">Target URL for DAST and header checks. <code>http://</code> is prepended automatically if missing. Used when scan type is <code>dast</code> or <code>both</code>.</span>
+                </div>
+                <div class="tmpl-row">
+                    <span class="tmpl-name">scan_type</span>
+                    <span class="tmpl-desc">One of <code>sast</code>, <code>dast</code>, or <code>both</code>. Controls which backend modules are invoked.</span>
+                </div>
+            </div>
+        </section>
+
+        <hr style="border:none;border-top:1px solid var(--border);margin-bottom:56px">
+
+        <!-- Scan types -->
+        <section class="doc-section" id="scan-types">
+            <h2>Scan types</h2>
+            <p class="lead">Each scan type maps to one or more backend modules.</p>
+
+            <h3>SAST &mdash; Static Analysis</h3>
+            <p>
+                Runs <code>backend/semgrep_scan.py</code>, which invokes Semgrep with the
+                <code>p/python</code> ruleset against the provided code path.
+                Results are a list of <code>{{rule_id, message, severity}}</code> dicts.
+                Semgrep severity values (<code>ERROR</code>, <code>WARNING</code>) are
+                normalised to <code>HIGH</code> / <code>MEDIUM</code> / <code>LOW</code>
+                by <code>generate_report_data</code> in <code>backend/report.py</code>.
+            </p>
+
+            <h3>DAST &mdash; Dynamic Analysis</h3>
+            <p>
+                Runs <code>backend/zap_scan.py</code> against the live target URL and returns
+                a path to the ZAP HTML report. Also runs <code>backend/headers_check.py</code>,
+                which fetches the URL and checks response headers against a rule set loaded from
+                <code>backend/headers_rules.json</code>.
+            </p>
+
+            <h3>Both</h3>
+            <p>
+                Runs SAST on <code>code_path</code> and DAST + header checks on <code>url</code>
+                in sequence. Both inputs must be provided.
+            </p>
+        </section>
+
+        <!-- Result shape -->
+        <section class="doc-section" id="result-shape">
+            <h2>Result object</h2>
+            <p class="lead">
+                After a POST, <code>app.py</code> passes a <code>result</code> dict to
+                <code>index.html</code>. Here is the full shape:
+            </p>
+
+            <div class="data-card">
+                <div class="data-card-header">result &mdash; Python dict</div>
+<pre><code>{
+  "summary": {
+    "total":  int,      # combined finding count
+    "high":   int,
+    "medium": int,
+    "low":    int
+  },
+
+  "sast": [             # present only if SAST was run
+    {
+      "severity": "HIGH" | "MEDIUM" | "LOW",
+      "message":  str
+    }
+  ],
+
+  "dast": {             # always present
+    "status":      "Completed",
+    "summary":     str,
+    "report_path": str  # absolute path to ZAP HTML report
+  },
+
+  "headers": {          # present only if DAST was run
+    "findings": [
+      {
+        "header":         str,   # e.g. "Content-Security-Policy"
+        "severity":       str,   # "HIGH" | "MEDIUM" | "LOW"
+        "category":       str,
+        "risk":           str,   # description of the risk
+        "recommendation": str    # fix suggestion
+      }
+    ],
+    "analysis":     [str],
+    "status_code":  int,
+    "headers":      dict,        # raw response headers
+    "url":          str
+  }
+}</code></pre>
+            </div>
+
+            <p>
+                The template accesses <code>result.dast.report_path</code> for the ZAP report link
+                and <code>h.recommendation</code> (not <code>h.fix</code>) for header fix suggestions.
+            </p>
+        </section>
+
+        <!-- Severity -->
+        <section class="doc-section" id="severity">
+            <h2>Severity levels</h2>
+            <p class="lead">Severity is normalised across SAST and header findings before being passed to templates.</p>
+
+            <div class="sev-ref">
+                <div class="sev-row">
+                    <span class="tag tag-high">HIGH</span>
+                    <span class="sev-source">Semgrep <code>ERROR</code></span>
+                    <span class="sev-detail">Critical vulnerabilities requiring immediate attention</span>
+                </div>
+                <div class="sev-row">
+                    <span class="tag tag-medium">MEDIUM</span>
+                    <span class="sev-source">Semgrep <code>WARNING</code></span>
+                    <span class="sev-detail">Notable issues that should be addressed soon</span>
+                </div>
+                <div class="sev-row">
+                    <span class="tag tag-low">LOW</span>
+                    <span class="sev-source">Semgrep <code>INFO</code></span>
+                    <span class="sev-detail">Minor findings or best-practice recommendations</span>
+                </div>
+                <div class="sev-row">
+                    <span class="tag tag-error">ERROR</span>
+                    <span class="sev-source">Raw Semgrep output</span>
+                    <span class="sev-detail">Shown as-is before normalisation in some legacy paths</span>
+                </div>
+                <div class="sev-row">
+                    <span class="tag tag-info">INFO</span>
+                    <span class="sev-source">Header rules fallback</span>
+                    <span class="sev-detail">Informational findings with no direct exploit risk</span>
+                </div>
+            </div>
+        </section>
+
+        <hr style="border:none;border-top:1px solid var(--border);margin-bottom:56px">
+
+        <!-- Reports overview -->
+        <section class="doc-section" id="reports-overview">
+            <h2>How reports work</h2>
+            <p class="lead">
+                Every scan automatically writes two output files to the project root.
+            </p>
+
+            <h3>Text report</h3>
+            <p>
+                Generated by <code>backend/report.py → generate_text_report()</code>.
+                Saved as <code>report_YYYYMMDD_HHMMSS.txt</code> in <code>REPORTS_DIR</code>
+                (the project root). The <code>/reports</code> route scans for these files with
+                <code>glob("report_*.txt")</code> and parses their headers for metadata.
+            </p>
+
+            <h3>Dashboard HTML</h3>
+            <p>
+                Generated by <code>backend/dashboard.py → generate_dashboard()</code>.
+                Saved as <code>dashboard.html</code> in the project root, overwriting the previous
+                one on each scan. It is a self-contained HTML file that can be opened directly
+                in a browser without Flask.
+            </p>
+
+            <div class="callout">
+                <strong>REPORTS_DIR</strong> is resolved at startup as
+                <code>os.path.dirname(os.path.dirname(os.path.abspath(__file__)))</code> —
+                one level above <code>frontend/</code>, which is the SecureFlow project root.
+            </div>
+        </section>
+
+        <!-- Report format -->
+        <section class="doc-section" id="report-format">
+            <h2>Report format</h2>
+            <p class="lead">Text reports follow a fixed plain-text structure that <code>_parse_report_meta()</code> reads to extract summary data for the reports list.</p>
+
+            <div class="data-card">
+                <div class="data-card-header">report_YYYYMMDD_HHMMSS.txt</div>
+<pre><code>=== SecureFlow Security Report ===
+
+Generated At: 20260417_163437
+Code Path:    /path/to/project
+Target URL:   https://example.com
+
+=== Executive Summary ===
+Total Issues: 9
+HIGH:   2
+MEDIUM: 1
+LOW:    6
+
+=== SAST Findings (Semgrep) ===
+[HIGH] Found 'subprocess' with shell=True ...
+
+=== DAST Summary (OWASP ZAP) ===
+OWASP ZAP baseline scan executed.
+Detailed Report: /path/to/zap_report.html
+
+=== Recommendations ===
+- Fix high/medium issues first.
+- Enforce secure headers and HTTPS.
+- Integrate scans into CI/CD.
+
+=== End of Report ===</code></pre>
+            </div>
+
+            <p>
+                The parser reads lines sequentially and stops once all six keys
+                (<code>target</code>, <code>code_path</code>, <code>total</code>,
+                <code>high</code>, <code>medium</code>, <code>low</code>) are found,
+                making it efficient even for large report files.
+            </p>
+        </section>
+
+    </main>
+</div>
+
+<script>
+    // Highlight the active sidebar link based on scroll position
+    const sections = document.querySelectorAll('.doc-section');
+    const links    = document.querySelectorAll('.sidebar-link');
+
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                links.forEach(l => l.classList.remove('active'));
+                const active = document.querySelector(`.sidebar-link[href="#${entry.target.id}"]`);
+                if (active) active.classList.add('active');
+            }
+        });
+    }, { rootMargin: '-20% 0px -70% 0px' });
+
+    sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

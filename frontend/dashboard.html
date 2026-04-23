@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecureFlow &mdash; Scan Report</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #fafafa;
+            color: #111827;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+    </style>
+</head>
+<body>
+
+<header style="height:56px;padding:0 32px;display:flex;align-items:center;justify-content:space-between;
+               background:#fff;border-bottom:1px solid #e5e7eb">
+    <span style="font-size:15px;font-weight:700;letter-spacing:-0.3px">SecureFlow</span>
+    <span style="font-size:12px;color:#9ca3af">Scan report</span>
+</header>
+
+<div style="max-width:780px;margin:0 auto;padding:48px 32px 96px">
+
+    <div style="margin-bottom:32px">
+        <h1 style="font-size:26px;font-weight:700;letter-spacing:-0.5px;line-height:1.2">Scan Results</h1>
+        <p style="margin-top:8px;font-size:14px;color:#6b7280">Target &mdash; https://raghav-verma.com/</p>
+    </div>
+
+    <!-- stat cards -->
+    <div style="display:flex;gap:12px;margin-bottom:32px">
+        
+            <div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:22px 24px;flex:1">
+                <div style="font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#6b7280">SAST findings</div>
+                <div style="font-size:32px;font-weight:700;color:#111827;margin-top:10px;letter-spacing:-1px">0</div>
+                
+            </div>
+        
+            <div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:22px 24px;flex:1">
+                <div style="font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#6b7280">Header issues</div>
+                <div style="font-size:32px;font-weight:700;color:#111827;margin-top:10px;letter-spacing:-1px">0</div>
+                
+            </div>
+        
+            <div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:22px 24px;flex:1">
+                <div style="font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#6b7280">DAST scan</div>
+                <div style="font-size:32px;font-weight:700;color:#111827;margin-top:10px;letter-spacing:-1px">Done</div>
+                <div style="margin-top:8px;font-size:12px;color:#9ca3af">Baseline scan completed</div>
+            </div>
+    </div>
+
+    <!-- SAST group -->
+    <div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden;margin-bottom:12px">
+        <div style="padding:13px 20px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+                    color:#6b7280;background:#fafafa;border-bottom:1px solid #e5e7eb;
+                    display:flex;justify-content:space-between;align-items:center">
+            <span>Static analysis</span>
+            <span style="font-size:11px;font-weight:500;letter-spacing:0;text-transform:none;color:#9ca3af">
+                0 findings
+            </span>
+        </div>
+        <p style="padding:16px 20px;font-size:13px;color:#9ca3af">No SAST findings.</p>
+    </div>
+
+    <!-- Headers group -->
+    <div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden;margin-bottom:12px">
+        <div style="padding:13px 20px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+                    color:#6b7280;background:#fafafa;border-bottom:1px solid #e5e7eb;
+                    display:flex;justify-content:space-between;align-items:center">
+            <span>HTTP headers</span>
+            <span style="font-size:11px;font-weight:500;letter-spacing:0;text-transform:none;color:#9ca3af">
+                0 findings
+            </span>
+        </div>
+        <p style="padding:16px 20px;font-size:13px;color:#9ca3af">No header findings.</p>
+    </div>
+
+    <!-- DAST group -->
+    <div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden;margin-bottom:12px">
+        <div style="padding:13px 20px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+                    color:#6b7280;background:#fafafa;border-bottom:1px solid #e5e7eb">
+            DAST report
+        </div>
+        <p style="padding:16px 20px;font-size:13px;color:#9ca3af">No DAST report available.</p>
+    </div>
+
+</div>
+</body>
+</html>

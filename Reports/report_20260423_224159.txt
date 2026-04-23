@@ -1,0 +1,26 @@
+=== SecureFlow Security Report ===
+
+Generated At: 20260423_224159
+Code Path: 
+Target URL: https://raghav-verma.com/
+
+=== Executive Summary ===
+Total Issues: 0
+HIGH: 0
+MEDIUM: 0
+LOW: 0
+
+=== SAST Findings (Semgrep) ===
+No SAST issues found.
+
+=== DAST Summary (OWASP ZAP) ===
+OWASP ZAP baseline scan executed (includes header checks, passive findings).
+Detailed Report: C:\Users\Shriem\Desktop\SecureFlow\zap_report.html
+
+=== Recommendations ===
+- Review ZAP findings (including header-related alerts) in the detailed report.
+- Fix high/medium issues first.
+- Enforce secure headers and HTTPS where applicable.
+- Integrate scans into CI/CD for continuous security.
+
+=== End of Report ===

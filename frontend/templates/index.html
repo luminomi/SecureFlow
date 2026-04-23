@@ -361,7 +361,7 @@
     <nav class="nav-links">
         <a href="/"        class="nav-link active">Scanner</a>
         <a href="/reports" class="nav-link">Reports</a>
-        <a href="#"        class="nav-link">Docs</a>
+        <a href="/docs"    class="nav-link">Docs</a>
     </nav>
     <span class="header-right">v1.0</span>
 </header>
@@ -421,12 +421,15 @@
             <span class="results-count">{{ total }} finding{{ 's' if total != 1 else '' }}</span>
         </div>
 
-        {% if result.sast %}
+        {% if result.sast_ran %}
         <div class="group">
             <div class="group-title">
                 Static analysis
                 <span class="group-count">{{ sast_count }} finding{{ 's' if sast_count != 1 else '' }}</span>
             </div>
+            {% if result.sast_error %}
+            <p class="no-findings" style="color:#991b1b;">Semgrep error: {{ result.sast_error }}</p>
+            {% elif result.sast %}
             {% for v in result.sast %}
             <div class="finding">
                 <span class="tag tag-{{ v.severity | lower }}">{{ v.severity }}</span>
@@ -435,6 +438,9 @@
                 </div>
             </div>
             {% endfor %}
+            {% else %}
+            <p class="no-findings">No issues found.</p>
+            {% endif %}
         </div>
         {% endif %}
 
