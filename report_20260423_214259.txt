@@ -1,0 +1,26 @@
+=== SecureFlow Security Report ===
+
+Generated At: 20260423_214259
+Code Path: /Users/mac/Downloads/SecureFlow
+Target URL: N/A
+
+=== Executive Summary ===
+Total Issues: 1
+HIGH: 0
+MEDIUM: 0
+LOW: 1
+
+=== SAST Findings (Semgrep) ===
+[LOW] None
+
+=== DAST Summary (OWASP ZAP) ===
+OWASP ZAP baseline scan executed (includes header checks, passive findings).
+Detailed Report: N/A
+
+=== Recommendations ===
+- Review ZAP findings (including header-related alerts) in the detailed report.
+- Fix high/medium issues first.
+- Enforce secure headers and HTTPS where applicable.
+- Integrate scans into CI/CD for continuous security.
+
+=== End of Report ===

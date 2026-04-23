@@ -34,13 +34,21 @@ Before running SecureFlow, ensure you have the following installed:
 
 ## 🖥️ Usage
 
+### Option 1: CLI (Command Line)
 Run the main CLI tool to start a scan:
-
 ```bash
 python main.py
 ```
 
+### Option 2: Web Interface (Frontend)
+SecureFlow now includes a web interface for a more interactive experience:
+```bash
+python app.py
+```
+Then navigate to `http://127.0.0.1:5000` in your browser.
+
 ### Scan Options:
+
 1. **Run SAST**: Provide the local path to your Python source code.
 2. **Run DAST**: Provide the target URL of the application to scan.
 3. **Run Both**: Perform a full assessment including code analysis, dynamic scanning, and header checks.
