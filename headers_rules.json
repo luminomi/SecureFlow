@@ -1,0 +1,50 @@
+{
+  "Content-Security-Policy": {
+    "category": "Security",
+    "severity": "HIGH",
+    "risk": "Prevents XSS attacks",
+    "recommendation": "Define a strict CSP policy"
+  },
+  "Strict-Transport-Security": {
+    "category": "Security",
+    "severity": "HIGH",
+    "risk": "Enforces HTTPS",
+    "recommendation": "Enable HSTS"
+  },
+  "X-Frame-Options": {
+    "category": "Security",
+    "severity": "MEDIUM",
+    "risk": "Prevents clickjacking",
+    "recommendation": "Set to DENY or SAMEORIGIN"
+  },
+  "X-Content-Type-Options": {
+    "category": "Security",
+    "severity": "LOW",
+    "risk": "Prevents MIME sniffing",
+    "recommendation": "Set to nosniff"
+  },
+  "Referrer-Policy": {
+    "category": "Privacy",
+    "severity": "LOW",
+    "risk": "Controls referrer leakage",
+    "recommendation": "Use strict-origin-when-cross-origin"
+  },
+  "Permissions-Policy": {
+    "category": "Privacy",
+    "severity": "LOW",
+    "risk": "Restricts browser features",
+    "recommendation": "Define restrictive permissions"
+  },
+  "Server": {
+    "category": "Information Disclosure",
+    "severity": "LOW",
+    "risk": "Reveals server details",
+    "recommendation": "Hide server header"
+  },
+  "X-Powered-By": {
+    "category": "Information Disclosure",
+    "severity": "LOW",
+    "risk": "Reveals backend technology",
+    "recommendation": "Remove this header"
+  }
+}

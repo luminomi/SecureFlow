@@ -1,38 +1,63 @@
 import requests
+import json
+import os
+import urllib3
 
+# Disable SSL warnings
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+
+# 🔹 LOAD RULES FROM JSON
+def load_rules():
+    base_path = os.path.dirname(__file__)
+    file_path = os.path.join(base_path, "headers_rules.json")  # <-- matches your file name
+
+    with open(file_path, "r") as f:
+        return json.load(f)
+
+
+# 🔹 MAIN FUNCTION
 def check_headers(url):
     try:
-        response = requests.get(url)
+        rules = load_rules()
+
+        response = requests.get(
+            url,
+            headers={"User-Agent": "Mozilla/5.0"},
+            timeout=10,
+            verify=False
+        )
+
         headers = response.headers
 
         findings = []
         analysis = []
 
-        # Security headers reference
-        required_headers = {
-            "Content-Security-Policy": "Prevents XSS attacks",
-            "X-Frame-Options": "Prevents clickjacking",
-            "X-Content-Type-Options": "Prevents MIME sniffing",
-            "Strict-Transport-Security": "Enforces HTTPS",
-            "Referrer-Policy": "Controls referrer leakage",
-            "Permissions-Policy": "Restricts browser features"
-        }
+        for header, rule in rules.items():
 
-        # Check missing headers
-        for header, desc in required_headers.items():
-            if header not in headers:
+            # Missing security headers
+            if header not in headers and rule["category"] != "Information Disclosure":
                 findings.append({
                     "header": header,
-                    "risk": desc
+                    "severity": rule["severity"],
+                    "category": rule["category"],
+                    "risk": rule["risk"],
+                    "recommendation": rule["recommendation"]
                 })
-                analysis.append(f"Missing {header} → {desc}")
 
-        # Info leakage checks
-        if "Server" in headers:
-            analysis.append("Server header exposed → potential information leakage")
+                analysis.append(f"Missing {header} → {rule['risk']}")
 
-        if "X-Powered-By" in headers:
-            analysis.append("X-Powered-By header exposed → technology disclosure")
+            # Info disclosure headers present
+            if header in headers and rule["category"] == "Information Disclosure":
+                findings.append({
+                    "header": header,
+                    "severity": rule["severity"],
+                    "category": rule["category"],
+                    "risk": rule["risk"],
+                    "recommendation": rule["recommendation"]
+                })
+
+                analysis.append(f"{header} exposed → {rule['risk']}")
 
         return {
             "findings": findings,
@@ -43,4 +68,5 @@ def check_headers(url):
         }
 
     except Exception as e:
+        print("ERROR in headers_check:", e)
         return {"error": str(e)}

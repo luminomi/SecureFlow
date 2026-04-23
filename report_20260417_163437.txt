@@ -1,0 +1,69 @@
+============================================================
+              SECUREFLOW SECURITY REPORT
+============================================================
+
+1. EXECUTIVE SUMMARY
+------------------------------------------------------------
+Automated security assessment using SAST, DAST and HTTP analysis.
+
+2. SCOPE
+------------------------------------------------------------
+SAST Target : C:\Users\Shriem\Desktop\SecureFlow
+DAST Target : https://pentest-ground.com:4280/
+
+3. SEVERITY OVERVIEW
+------------------------------------------------------------
+HIGH   : 2
+MEDIUM : 1
+LOW    : 5
+ERROR  : 1
+UNKNOWN: 0
+
+4.1 SAST Findings
+----------------------------------------
+[ERROR] Found 'subprocess' function 'run' with 'shell=True'. This is dangerous because this call will spawn the command using a shell process. Doing so propagates current shell settings and variables, which makes it much easier for a malicious actor to execute commands. Use 'shell=False' instead.
+
+
+4.2 HTTP Headers
+----------------------------------------
+[HIGH] Content-Security-Policy
+Risk: Prevents XSS attacks
+Fix: Define a strict CSP policy
+
+[HIGH] Strict-Transport-Security
+Risk: Enforces HTTPS
+Fix: Enable HSTS
+
+[MEDIUM] X-Frame-Options
+Risk: Prevents clickjacking
+Fix: Set to DENY or SAMEORIGIN
+
+[LOW] X-Content-Type-Options
+Risk: Prevents MIME sniffing
+Fix: Set to nosniff
+
+[LOW] Referrer-Policy
+Risk: Controls referrer leakage
+Fix: Use strict-origin-when-cross-origin
+
+[LOW] Permissions-Policy
+Risk: Restricts browser features
+Fix: Define restrictive permissions
+
+[LOW] Server
+Risk: Reveals server details
+Fix: Hide server header
+
+[LOW] X-Powered-By
+Risk: Reveals backend technology
+Fix: Remove this header
+
+
+4.3 HTTP TRANSACTION
+----------------------------------------
+GET https://pentest-ground.com:4280/
+Status: 200
+
+5. DAST
+----------------------------------------
+Report: C:\Users\Shriem\Desktop\SecureFlow\zap_report.html

@@ -2,6 +2,7 @@ from semgrep_scan import run_semgrep
 from zap_scan import run_zap
 from headers_check import check_headers
 from report import generate_report
+from dashboard import generate_dashboard
 
 def main():
     print("=== SecureFlow ===")
@@ -66,7 +67,7 @@ def main():
             url,
             semgrep_results,
             zap_result.get("report"),
-            header_data
+            header_data   # ← VERY IMPORTANT
         )
 
     else:

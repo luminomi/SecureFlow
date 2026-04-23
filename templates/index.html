@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SecureFlow</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            padding: 40px;
+        }
+
+        h1 {
+            font-size: 32px;
+        }
+
+        input, select, button {
+            padding: 10px;
+            margin: 10px 0;
+            width: 100%;
+            border-radius: 6px;
+            border: none;
+        }
+
+        button {
+            background: #3b82f6;
+            color: white;
+            cursor: pointer;
+        }
+
+        .card {
+            background: #1e293b;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 10px;
+        }
+
+        .high { color: red; }
+        .medium { color: orange; }
+        .low { color: lightgreen; }
+    </style>
+</head>
+<body>
+
+<h1>SecureFlow Dashboard</h1>
+
+<form method="POST">
+    <label>Code Path (for SAST)</label>
+    <input type="text" name="code_path" placeholder="C:\project">
+
+    <label>Target URL (for DAST)</label>
+    <input type="text" name="url" placeholder="https://example.com">
+
+    <label>Scan Type</label>
+    <select name="scan_type">
+        <option value="sast">SAST</option>
+        <option value="dast">DAST</option>
+        <option value="both">Both</option>
+    </select>
+
+    <button type="submit">Run Scan</button>
+</form>
+
+{% if result %}
+
+<div class="card">
+    <h2>Results</h2>
+
+    {% if result.sast %}
+        <h3>SAST Findings</h3>
+        {% for v in result.sast %}
+            <p><strong>[{{ v.severity }}]</strong> {{ v.message }}</p>
+        {% endfor %}
+    {% endif %}
+
+    {% if result.headers %}
+        <h3>Header Issues</h3>
+        {% for h in result.headers.findings %}
+            <p class="{{ h.severity|lower }}">
+                [{{ h.severity }}] {{ h.header }} - {{ h.risk }}
+            </p>
+        {% endfor %}
+    {% endif %}
+
+    {% if result.dast %}
+        <h3>DAST Report</h3>
+        <a href="{{ result.dast }}" target="_blank">Open ZAP Report</a>
+    {% endif %}
+
+</div>
+
+{% endif %}
+
+</body>
+</html>

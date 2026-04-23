@@ -1,133 +1,107 @@
-from datetime import datetime
+import datetime
 
-def generate_report(code_path, url, semgrep_results, zap_report_path, header_data):
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    filename = f"report_{timestamp}.txt"
+def generate_report_data(semgrep_results, zap_report_path):
 
-    severity_count = {
-        "HIGH": 0,
-        "MEDIUM": 0,
-        "LOW": 0,
-        "ERROR": 0,
-        "UNKNOWN": 0
+    high = medium = low = 0
+
+    # ---- SAST ----
+    sast = []
+    if semgrep_results:
+        for i in semgrep_results:
+            sev_raw = (i.get("severity") or "").upper()
+            if sev_raw == "ERROR":
+                sev = "HIGH"; high += 1
+            elif sev_raw == "WARNING":
+                sev = "MEDIUM"; medium += 1
+            else:
+                sev = "LOW"; low += 1
+
+            sast.append({
+                "severity": sev,
+                "message": i.get("message")
+            })
+
+    # ---- DAST (ZAP) summary ----
+    dast = {
+        "status": "Completed",
+        "summary": "OWASP ZAP baseline scan executed (includes header checks, passive findings).",
+        "report_path": zap_report_path
     }
 
-    # Count SAST severities
-    for v in semgrep_results:
-        sev = v.get("severity", "UNKNOWN").upper()
-        if sev in severity_count:
-            severity_count[sev] += 1
-        else:
-            severity_count["UNKNOWN"] += 1
+    report = {
+        "summary": {
+            "total": high + medium + low,
+            "high": high,
+            "medium": medium,
+            "low": low
+        },
+        "sast": sast,
+        "dast": dast
+    }
+    return report
 
-    # Header issues count as MEDIUM
-    if header_data and "findings" in header_data:
-        severity_count["MEDIUM"] += len(header_data["findings"])
 
-    with open(filename, "w", encoding="utf-8") as f:
+def generate_text_report(report, code_path, url):
+    ts = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+    fname = f"report_{ts}.txt"
 
-        # ===== HEADER =====
-        f.write("=" * 60 + "\n")
-        f.write("              SECUREFLOW SECURITY REPORT\n")
-        f.write("=" * 60 + "\n\n")
+    lines = []
+    lines.append("=== SecureFlow Security Report ===\n")
+    lines.append(f"Generated At: {ts}")
+    lines.append(f"Code Path: {code_path}")
+    lines.append(f"Target URL: {url}\n")
 
-        # ===== EXECUTIVE SUMMARY =====
-        f.write("1. EXECUTIVE SUMMARY\n")
-        f.write("-" * 60 + "\n")
-        f.write("This report presents the results of an automated security assessment\n")
-        f.write("performed using SecureFlow, including static analysis, dynamic scanning,\n")
-        f.write("and HTTP transaction inspection.\n\n")
+    lines.append("=== Executive Summary ===")
+    lines.append(f"Total Issues: {report['summary']['total']}")
+    lines.append(f"HIGH: {report['summary']['high']}")
+    lines.append(f"MEDIUM: {report['summary']['medium']}")
+    lines.append(f"LOW: {report['summary']['low']}\n")
 
-        # ===== SCOPE =====
-        f.write("2. SCOPE\n")
-        f.write("-" * 60 + "\n")
+    lines.append("=== SAST Findings (Semgrep) ===")
+    if report["sast"]:
+        for f in report["sast"]:
+            lines.append(f"[{f['severity']}] {f['message']}")
+    else:
+        lines.append("No SAST issues found.")
+    lines.append("")
 
-        if code_path != "N/A" and url != "N/A":
-            scan_type = "SAST + DAST"
-        elif code_path != "N/A":
-            scan_type = "SAST Only"
-        else:
-            scan_type = "DAST Only"
+    lines.append("=== DAST Summary (OWASP ZAP) ===")
+    lines.append(report["dast"]["summary"])
+    if report["dast"]["report_path"]:
+        lines.append(f"Detailed Report: {report['dast']['report_path']}")
+    lines.append("")
 
-        f.write(f"SAST Target : {code_path}\n")
-        f.write(f"DAST Target : {url}\n")
-        f.write(f"Scan Type   : {scan_type}\n\n")
+    lines.append("=== Recommendations ===")
+    lines.append("- Review ZAP findings (including header-related alerts) in the detailed report.")
+    lines.append("- Fix high/medium issues first.")
+    lines.append("- Enforce secure headers and HTTPS where applicable.")
+    lines.append("- Integrate scans into CI/CD for continuous security.\n")
 
-        # ===== SEVERITY =====
-        f.write("3. SEVERITY OVERVIEW\n")
-        f.write("-" * 60 + "\n")
-        for k, v in severity_count.items():
-            f.write(f"{k:<7}: {v}\n")
-        f.write("\n")
+    lines.append("=== End of Report ===")
 
-        # ===== FINDINGS =====
-        f.write("4. FINDINGS\n")
-        f.write("-" * 60 + "\n")
+    with open(fname, "w", encoding="utf-8") as f:
+        f.write("\n".join(lines))
 
-        # ---- SAST ----
-        f.write("\n4.1 SAST Findings\n")
-        f.write("-" * 40 + "\n")
+    return fname
 
-        if not semgrep_results:
-            f.write("No vulnerabilities found.\n")
-        else:
-            for i, v in enumerate(semgrep_results, 1):
-                f.write(f"{i}. [{v.get('severity')}] {v.get('message')}\n")
-                f.write(f"   Rule ID: {v.get('rule_id')}\n\n")
 
-        # ---- HEADERS ----
-        f.write("\n4.2 HTTP Security Headers Analysis\n")
-        f.write("-" * 40 + "\n")
+def generate_report(code_path, url, semgrep_results, zap_report_path, header_data):
+    """
+    Main entry point for report generation called by main.py
+    """
+    # 1. Prepare data structure
+    report_data = generate_report_data(semgrep_results, zap_report_path)
+    
+    # 2. Add header findings to report data (if not already there)
+    if header_data:
+        report_data["headers"] = header_data
 
-        if not header_data or "findings" not in header_data:
-            f.write("Header analysis not available.\n")
-        elif not header_data["findings"]:
-            f.write("All important security headers are present.\n")
-        else:
-            for h in header_data["findings"]:
-                f.write(f"[MEDIUM] Missing {h['header']} - {h['risk']}\n")
+    # 3. Generate text report
+    txt_report = generate_text_report(report_data, code_path, url)
+    print(f"[+] Text report generated: {txt_report}")
 
-        # ---- HTTP TRANSACTION ----
-        f.write("\n4.3 HTTP TRANSACTION ANALYSIS\n")
-        f.write("-" * 40 + "\n")
+    # 4. Generate dashboard
+    from dashboard import generate_dashboard
+    generate_dashboard(url, semgrep_results, header_data, zap_report_path)
 
-        if not header_data or "status_code" not in header_data:
-            f.write("Transaction data not available.\n")
-        else:
-            f.write(f"Request: GET {header_data['url']}\n\n")
-            f.write(f"Response Status: {header_data['status_code']}\n\n")
-
-            f.write("Important Headers:\n")
-            for h in ["Server", "X-Powered-By", "Content-Type"]:
-                val = header_data["headers"].get(h)
-                if val:
-                    f.write(f"{h}: {val}\n")
-
-            f.write("\nSecurity Insights:\n")
-            for a in header_data.get("analysis", []):
-                f.write(f"- {a}\n")
-
-        # ---- DAST ----
-        f.write("\n5. DAST SUMMARY\n")
-        f.write("-" * 60 + "\n")
-
-        if zap_report_path and zap_report_path != "N/A":
-            f.write("ZAP scan completed successfully.\n")
-            f.write(f"Detailed report: {zap_report_path}\n")
-        else:
-            f.write("DAST not executed.\n")
-
-        # ---- RECOMMENDATIONS ----
-        f.write("\n6. RECOMMENDATIONS\n")
-        f.write("-" * 60 + "\n")
-        f.write("- Avoid subprocess with shell=True\n")
-        f.write("- Add Content-Security-Policy header\n")
-        f.write("- Enable X-Frame-Options\n")
-        f.write("- Use HTTPS with HSTS\n")
-
-        # ---- CONCLUSION ----
-        f.write("\n7. CONCLUSION\n")
-        f.write("-" * 60 + "\n")
-        f.write("Security issues detected. Remediation recommended.\n")
-
-    print(f"\n[+] Report generated: {filename}")
+    return txt_report
