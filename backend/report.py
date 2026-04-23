@@ -74,6 +74,16 @@ def generate_text_report(report, code_path, url, output_dir=None):
         lines.append("No SAST issues found.")
     lines.append("")
 
+    header_findings = report.get("headers", {}).get("findings", [])
+    if header_findings:
+        lines.append("=== HTTP Header Findings ===")
+        for h in header_findings:
+            lines.append(f"[{h['severity']}] {h['header']}")
+            lines.append(f"  Risk: {h['risk']}")
+            if h.get("recommendation"):
+                lines.append(f"  Fix:  {h['recommendation']}")
+        lines.append("")
+
     lines.append("=== DAST Summary (OWASP ZAP) ===")
     lines.append(report["dast"]["summary"])
     if report["dast"]["report_path"]:
@@ -112,7 +122,7 @@ def generate_report(code_path, url, semgrep_results, zap_report_path, header_dat
     print(f"[+] Text report generated: {txt_report}")
 
     # 4. Generate dashboard
-    from dashboard import generate_dashboard
+    from backend.dashboard import generate_dashboard
     generate_dashboard(url, semgrep_results, header_data, zap_report_path)
 
     return txt_report

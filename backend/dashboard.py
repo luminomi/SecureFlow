@@ -1,3 +1,6 @@
+import os
+
+
 def generate_dashboard(url, semgrep_results, header_data, zap_report_path):
     findings  = header_data.get("findings", []) if header_data else []
     sast_list = semgrep_results if semgrep_results else []
@@ -179,7 +182,10 @@ def generate_dashboard(url, semgrep_results, header_data, zap_report_path):
 </body>
 </html>"""
 
-    with open("dashboard.html", "w", encoding="utf-8") as f:
+    project_root   = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    dashboard_path = os.path.join(project_root, "dashboard.html")
+
+    with open(dashboard_path, "w", encoding="utf-8") as f:
         f.write(html)
 
-    print("[+] Dashboard generated: dashboard.html")
+    print(f"[+] Dashboard generated: {dashboard_path}")

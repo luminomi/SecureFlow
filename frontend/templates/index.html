@@ -474,7 +474,7 @@
         </div>
         {% endif %}
 
-        {% if not result.sast and not result.headers and not result.dast %}
+        {% if not result.sast_ran and not result.headers and (not result.dast or result.dast.report_path == "N/A") %}
         <div class="group">
             <p class="no-findings">No findings returned for this scan.</p>
         </div>

@@ -71,11 +71,11 @@ def index():
         result = generate_report_data(semgrep_results, zap_result.get("report", "N/A"))
         result["sast_ran"] = sast_ran
 
-        if header_data:
+        if header_data and "findings" in header_data:
             result["headers"] = header_data
 
         # Save text report and dashboard after every scan
-        generate_text_report(result, code_path, url, output_dir=REPORTS_DIR)
+        generate_text_report(result, code_path or "N/A", url or "N/A", output_dir=REPORTS_DIR)
         generate_dashboard(url or "N/A", semgrep_results, header_data,
                            zap_result.get("report", "N/A"))
 

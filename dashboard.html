@@ -1,102 +1,140 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>SecureFlow Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecureFlow &mdash; Scan Report</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: #0f172a;
-            color: #e2e8f0;
-            margin: 0;
-            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #fafafa;
+            color: #111827;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
         }
-
-        .container {
-            padding: 40px;
-        }
-
-        h1 {
-            font-size: 32px;
-            margin-bottom: 10px;
-        }
-
-        .subtitle {
-            color: #94a3b8;
-            margin-bottom: 30px;
-        }
-
-        .cards {
-            display: flex;
-            gap: 20px;
-        }
-
-        .card {
-            background: #1e293b;
-            padding: 20px;
-            border-radius: 12px;
-            flex: 1;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-        }
-
-        .card h2 {
-            margin-top: 0;
-            font-size: 18px;
-            color: #cbd5f5;
-        }
-
-        .stat {
-            font-size: 28px;
-            margin-top: 10px;
-        }
-
-        .high { color: #ef4444; }
-        .medium { color: #f59e0b; }
-        .low { color: #22c55e; }
-
-        .section {
-            margin-top: 40px;
-        }
-
-        .btn {
-            display: inline-block;
-            margin-top: 15px;
-            padding: 10px 16px;
-            background: #3b82f6;
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-        }
-
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>SecureFlow Dashboard</h1>
-    <div class="subtitle">Target: N/A</div>
+<header style="height:56px;padding:0 32px;display:flex;align-items:center;justify-content:space-between;
+               background:#fff;border-bottom:1px solid #e5e7eb">
+    <span style="font-size:15px;font-weight:700;letter-spacing:-0.3px">SecureFlow</span>
+    <span style="font-size:12px;color:#9ca3af">Scan report</span>
+</header>
 
-    <div class="cards">
-        <div class="card">
-            <h2>SAST Findings</h2>
-            <div class="stat">1</div>
-        </div>
+<div style="max-width:780px;margin:0 auto;padding:48px 32px 96px">
 
-        <div class="card">
-            <h2>Header Issues</h2>
-            <div class="stat">0</div>
-        </div>
-
-        <div class="card">
-            <h2>DAST Scan</h2>
-            <div class="stat">Completed</div>
-            <a class="btn" href="N/A" target="_blank">View ZAP Report</a>
-        </div>
+    <div style="margin-bottom:32px">
+        <h1 style="font-size:26px;font-weight:700;letter-spacing:-0.5px;line-height:1.2">Scan Results</h1>
+        <p style="margin-top:8px;font-size:14px;color:#6b7280">Target &mdash; https://raghav-verma.com/</p>
     </div>
 
-    <div class="section">
-        <h2>Header Findings</h2>
+    <!-- stat cards -->
+    <div style="display:flex;gap:12px;margin-bottom:32px">
+        
+            <div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:22px 24px;flex:1">
+                <div style="font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#6b7280">SAST findings</div>
+                <div style="font-size:32px;font-weight:700;color:#111827;margin-top:10px;letter-spacing:-1px">0</div>
+                
+            </div>
+        
+            <div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:22px 24px;flex:1">
+                <div style="font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#6b7280">Header issues</div>
+                <div style="font-size:32px;font-weight:700;color:#111827;margin-top:10px;letter-spacing:-1px">6</div>
+                <div style="margin-top:8px;font-size:12px;font-weight:500"><span style="color:#991b1b">1H</span>&nbsp;&nbsp;<span style="color:#92400e">1M</span>&nbsp;&nbsp;<span style="color:#14532d">4L</span></div>
+            </div>
+        
+            <div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:22px 24px;flex:1">
+                <div style="font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#6b7280">DAST scan</div>
+                <div style="font-size:32px;font-weight:700;color:#111827;margin-top:10px;letter-spacing:-1px">Done</div>
+                <div style="margin-top:8px;font-size:12px;color:#9ca3af">Baseline scan completed</div>
+            </div>
+    </div>
 
+    <!-- SAST group -->
+    <div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden;margin-bottom:12px">
+        <div style="padding:13px 20px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+                    color:#6b7280;background:#fafafa;border-bottom:1px solid #e5e7eb;
+                    display:flex;justify-content:space-between;align-items:center">
+            <span>Static analysis</span>
+            <span style="font-size:11px;font-weight:500;letter-spacing:0;text-transform:none;color:#9ca3af">
+                0 findings
+            </span>
+        </div>
+        <p style="padding:16px 20px;font-size:13px;color:#9ca3af">No SAST findings.</p>
+    </div>
+
+    <!-- Headers group -->
+    <div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden;margin-bottom:12px">
+        <div style="padding:13px 20px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+                    color:#6b7280;background:#fafafa;border-bottom:1px solid #e5e7eb;
+                    display:flex;justify-content:space-between;align-items:center">
+            <span>HTTP headers</span>
+            <span style="font-size:11px;font-weight:500;letter-spacing:0;text-transform:none;color:#9ca3af">
+                6 findings
+            </span>
+        </div>
+        
+            <div style="display:flex;align-items:flex-start;gap:13px;padding:14px 20px;border-bottom:1px solid #e5e7eb">
+                <span style="display:inline-block;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:5px;border:1px solid #fecaca;background:#fef2f2;color:#991b1b;white-space:nowrap;flex-shrink:0;margin-top:2px">HIGH</span>
+                <div style="flex:1;min-width:0">
+                    <div style="font-size:13.5px;font-weight:500;color:#111827">Content-Security-Policy</div>
+                    <div style="font-size:12.5px;color:#6b7280;margin-top:3px">Prevents XSS attacks</div>
+                    <span style="display:inline-block;margin-top:7px;font-size:12px;color:#047857;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:5px;padding:3px 9px">Fix &mdash; Define a strict CSP policy</span>
+                </div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:13px;padding:14px 20px;border-bottom:1px solid #e5e7eb">
+                <span style="display:inline-block;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:5px;border:1px solid #fde68a;background:#fffbeb;color:#92400e;white-space:nowrap;flex-shrink:0;margin-top:2px">MEDIUM</span>
+                <div style="flex:1;min-width:0">
+                    <div style="font-size:13.5px;font-weight:500;color:#111827">X-Frame-Options</div>
+                    <div style="font-size:12.5px;color:#6b7280;margin-top:3px">Prevents clickjacking</div>
+                    <span style="display:inline-block;margin-top:7px;font-size:12px;color:#047857;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:5px;padding:3px 9px">Fix &mdash; Set to DENY or SAMEORIGIN</span>
+                </div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:13px;padding:14px 20px;border-bottom:1px solid #e5e7eb">
+                <span style="display:inline-block;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:5px;border:1px solid #bbf7d0;background:#f0fdf4;color:#14532d;white-space:nowrap;flex-shrink:0;margin-top:2px">LOW</span>
+                <div style="flex:1;min-width:0">
+                    <div style="font-size:13.5px;font-weight:500;color:#111827">X-Content-Type-Options</div>
+                    <div style="font-size:12.5px;color:#6b7280;margin-top:3px">Prevents MIME sniffing</div>
+                    <span style="display:inline-block;margin-top:7px;font-size:12px;color:#047857;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:5px;padding:3px 9px">Fix &mdash; Set to nosniff</span>
+                </div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:13px;padding:14px 20px;border-bottom:1px solid #e5e7eb">
+                <span style="display:inline-block;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:5px;border:1px solid #bbf7d0;background:#f0fdf4;color:#14532d;white-space:nowrap;flex-shrink:0;margin-top:2px">LOW</span>
+                <div style="flex:1;min-width:0">
+                    <div style="font-size:13.5px;font-weight:500;color:#111827">Referrer-Policy</div>
+                    <div style="font-size:12.5px;color:#6b7280;margin-top:3px">Controls referrer leakage</div>
+                    <span style="display:inline-block;margin-top:7px;font-size:12px;color:#047857;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:5px;padding:3px 9px">Fix &mdash; Use strict-origin-when-cross-origin</span>
+                </div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:13px;padding:14px 20px;border-bottom:1px solid #e5e7eb">
+                <span style="display:inline-block;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:5px;border:1px solid #bbf7d0;background:#f0fdf4;color:#14532d;white-space:nowrap;flex-shrink:0;margin-top:2px">LOW</span>
+                <div style="flex:1;min-width:0">
+                    <div style="font-size:13.5px;font-weight:500;color:#111827">Permissions-Policy</div>
+                    <div style="font-size:12.5px;color:#6b7280;margin-top:3px">Restricts browser features</div>
+                    <span style="display:inline-block;margin-top:7px;font-size:12px;color:#047857;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:5px;padding:3px 9px">Fix &mdash; Define restrictive permissions</span>
+                </div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:13px;padding:14px 20px;border-bottom:1px solid #e5e7eb">
+                <span style="display:inline-block;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:5px;border:1px solid #bbf7d0;background:#f0fdf4;color:#14532d;white-space:nowrap;flex-shrink:0;margin-top:2px">LOW</span>
+                <div style="flex:1;min-width:0">
+                    <div style="font-size:13.5px;font-weight:500;color:#111827">Server</div>
+                    <div style="font-size:12.5px;color:#6b7280;margin-top:3px">Reveals server details</div>
+                    <span style="display:inline-block;margin-top:7px;font-size:12px;color:#047857;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:5px;padding:3px 9px">Fix &mdash; Hide server header</span>
+                </div>
+            </div>
+    </div>
+
+    <!-- DAST group -->
+    <div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden;margin-bottom:12px">
+        <div style="padding:13px 20px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+                    color:#6b7280;background:#fafafa;border-bottom:1px solid #e5e7eb">
+            DAST report
+        </div>
+        <p style="padding:16px 20px;font-size:13px;color:#9ca3af">No DAST report available.</p>
     </div>
 
 </div>

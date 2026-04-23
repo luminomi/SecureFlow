@@ -439,7 +439,7 @@
                 and stored as <code>.txt</code> report files in the project root.
             </p>
             <div class="callout">
-                <strong>Note:</strong> The templates use Jinja2 syntax (<code>{% ... %}</code>, <code>{{ ... }}</code>)
+                <strong>Note:</strong> The templates use Jinja2 syntax (<code>&#123;% ... %&#125;</code>, <code>&#123;&#123; ... &#125;&#125;</code>)
                 and will only render correctly when served through Flask at
                 <code>http://127.0.0.1:5000</code> — not when opened directly as a static file.
             </div>
@@ -538,7 +538,7 @@ python app.py</code></pre>
 
             <p>
                 The <code>/reports/&lt;filename&gt;</code> route validates the filename against
-                <code>report_\d{{8}}_\d{{6}}\.txt</code> before serving, returning 404 for
+                <code>report_\d&#123;8&#125;_\d&#123;6&#125;\.txt</code> before serving, returning 404 for
                 anything that does not match.
             </p>
         </section>
@@ -600,7 +600,7 @@ python app.py</code></pre>
             <p>
                 Runs <code>backend/semgrep_scan.py</code>, which invokes Semgrep with the
                 <code>p/python</code> ruleset against the provided code path.
-                Results are a list of <code>{{rule_id, message, severity}}</code> dicts.
+                Results are a list of <code>&#123;rule_id, message, severity&#125;</code> dicts.
                 Semgrep severity values (<code>ERROR</code>, <code>WARNING</code>) are
                 normalised to <code>HIGH</code> / <code>MEDIUM</code> / <code>LOW</code>
                 by <code>generate_report_data</code> in <code>backend/report.py</code>.

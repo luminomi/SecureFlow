@@ -20,3 +20,11 @@ Thumbs.db
 # IDE
 .vscode/
 .idea/
+myenv/
+
+# SecureFlow generated outputs
+Reports/
+dashboard.html
+zap_report.html
+ZAP_*/
+*.db
