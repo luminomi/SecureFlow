@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports &mdash; SecureFlow</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg:      #fafafa;
+            --surface: #ffffff;
+            --border:  #e5e7eb;
+            --fg:      #111827;
+            --fg-2:    #6b7280;
+            --fg-3:    #9ca3af;
+            --high:    #991b1b;
+            --medium:  #92400e;
+            --low:     #14532d;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg);
+            color: var(--fg);
+            min-height: 100vh;
+            font-size: 14px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        header {
+            height: 56px;
+            padding: 0 32px;
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .wordmark {
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            color: var(--fg);
+            text-decoration: none;
+        }
+
+        .nav-links { display: flex; gap: 4px; }
+
+        .nav-link {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--fg-2);
+            padding: 5px 10px;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: color 0.1s, background 0.1s;
+        }
+
+        .nav-link:hover  { color: var(--fg); background: var(--bg); }
+        .nav-link.active { color: var(--fg); background: var(--bg); }
+
+        .header-right {
+            margin-left: auto;
+            font-size: 12px;
+            color: var(--fg-3);
+        }
+
+        .page {
+            max-width: 780px;
+            margin: 0 auto;
+            padding: 48px 32px 96px;
+        }
+
+        .page-heading { margin-bottom: 28px; }
+
+        .page-heading h1 {
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .page-heading p {
+            margin-top: 7px;
+            font-size: 14px;
+            color: var(--fg-2);
+        }
+
+        /* ── Report table ── */
+        .report-table {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .table-header {
+            display: grid;
+            grid-template-columns: 180px 1fr 130px 80px;
+            padding: 11px 20px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--fg-3);
+            background: var(--bg);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .report-row {
+            display: grid;
+            grid-template-columns: 180px 1fr 130px 80px;
+            align-items: center;
+            padding: 14px 20px;
+            border-bottom: 1px solid var(--border);
+            text-decoration: none;
+            color: inherit;
+            transition: background 0.1s;
+        }
+
+        .report-row:last-child { border-bottom: none; }
+        .report-row:hover { background: #f9fafb; }
+
+        .row-date {
+            font-size: 13px;
+            font-family: 'SF Mono', 'Cascadia Code', monospace;
+            color: var(--fg-2);
+        }
+
+        .row-target {
+            font-size: 13px;
+            color: var(--fg);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding-right: 16px;
+        }
+
+        .row-target.na { color: var(--fg-3); }
+
+        .row-counts {
+            display: flex;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .cnt-h { color: var(--high); }
+        .cnt-m { color: var(--medium); }
+        .cnt-l { color: var(--low); }
+        .cnt-zero { color: var(--fg-3); font-weight: 400; }
+
+        .row-action {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--fg-2);
+            text-align: right;
+        }
+
+        .report-row:hover .row-action { color: var(--fg); }
+
+        /* ── Empty state ── */
+        .empty {
+            padding: 56px 20px;
+            text-align: center;
+        }
+
+        .empty p {
+            font-size: 14px;
+            color: var(--fg-3);
+            margin-bottom: 16px;
+        }
+
+        .empty a {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--fg);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+
+        @media (max-width: 600px) {
+            header { padding: 0 16px; gap: 16px; }
+            .nav-links { display: none; }
+            .page { padding: 28px 16px 64px; }
+            .table-header,
+            .report-row { grid-template-columns: 1fr auto; }
+            .table-header .col-target,
+            .table-header .col-counts,
+            .row-target,
+            .row-counts { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="/" class="wordmark">SecureFlow</a>
+    <nav class="nav-links">
+        <a href="/"        class="nav-link">Scanner</a>
+        <a href="/reports" class="nav-link active">Reports</a>
+        <a href="#"        class="nav-link">Docs</a>
+    </nav>
+    <span class="header-right">v1.0</span>
+</header>
+
+<div class="page">
+
+    <div class="page-heading">
+        <h1>Reports</h1>
+        <p>{{ reports | length }} scan report{{ 's' if reports | length != 1 else '' }} saved.</p>
+    </div>
+
+    <div class="report-table">
+
+        {% if reports %}
+
+        <div class="table-header">
+            <span>Date &amp; time</span>
+            <span class="col-target">Target</span>
+            <span class="col-counts">Findings</span>
+            <span></span>
+        </div>
+
+        {% for r in reports %}
+        <a class="report-row" href="/reports/{{ r.filename }}">
+            <span class="row-date">{{ r.datetime }}</span>
+            <span class="row-target {% if r.meta.target == 'N/A' %}na{% endif %}">
+                {{ r.meta.target }}
+            </span>
+            <span class="row-counts">
+                <span class="{% if r.meta.high != '0' %}cnt-h{% else %}cnt-zero{% endif %}">
+                    {{ r.meta.high }}H
+                </span>
+                <span class="{% if r.meta.medium != '0' %}cnt-m{% else %}cnt-zero{% endif %}">
+                    {{ r.meta.medium }}M
+                </span>
+                <span class="{% if r.meta.low != '0' %}cnt-l{% else %}cnt-zero{% endif %}">
+                    {{ r.meta.low }}L
+                </span>
+            </span>
+            <span class="row-action">View &rarr;</span>
+        </a>
+        {% endfor %}
+
+        {% else %}
+
+        <div class="empty">
+            <p>No reports yet. Run a scan to generate one.</p>
+            <a href="/">Go to scanner &rarr;</a>
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+</body>
+</html>

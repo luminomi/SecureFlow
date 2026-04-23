@@ -1,95 +1,482 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SecureFlow</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg:       #fafafa;
+            --surface:  #ffffff;
+            --border:   #e5e7eb;
+            --border-hi:#d1d5db;
+            --fg:       #111827;
+            --fg-2:     #6b7280;
+            --fg-3:     #9ca3af;
+            --tag-high-bg:   #fef2f2; --tag-high-bd: #fecaca; --tag-high-fg: #991b1b;
+            --tag-medium-bg: #fffbeb; --tag-medium-bd: #fde68a; --tag-medium-fg: #92400e;
+            --tag-low-bg:    #f0fdf4; --tag-low-bd: #bbf7d0;  --tag-low-fg: #14532d;
+            --tag-error-bg:  #fdf4ff; --tag-error-bd: #e9d5ff; --tag-error-fg: #6b21a8;
+            --tag-info-bg:   #eff6ff; --tag-info-bd: #bfdbfe;  --tag-info-fg: #1e40af;
+        }
+
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background: #0f172a;
-            color: #e2e8f0;
-            padding: 40px;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg);
+            color: var(--fg);
+            min-height: 100vh;
+            font-size: 14px;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
         }
 
-        h1 {
-            font-size: 32px;
+        /* ── Header ── */
+        header {
+            height: 56px;
+            padding: 0 32px;
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
         }
 
-        input, select, button {
-            padding: 10px;
-            margin: 10px 0;
-            width: 100%;
+        .wordmark {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--fg);
+            letter-spacing: -0.3px;
+            flex-shrink: 0;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 4px;
+        }
+
+        .nav-link {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--fg-2);
+            padding: 5px 10px;
             border-radius: 6px;
-            border: none;
+            text-decoration: none;
+            transition: color 0.1s, background 0.1s;
         }
 
-        button {
-            background: #3b82f6;
-            color: white;
-            cursor: pointer;
+        .nav-link:hover, .nav-link.active {
+            color: var(--fg);
+            background: var(--bg);
         }
 
+        .header-right {
+            margin-left: auto;
+            font-size: 12px;
+            color: var(--fg-3);
+        }
+
+        /* ── Page ── */
+        .page {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 52px 32px 100px;
+        }
+
+        /* ── Page heading ── */
+        .page-heading {
+            margin-bottom: 32px;
+        }
+
+        .page-heading h1 {
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--fg);
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+        }
+
+        .page-heading p {
+            margin-top: 8px;
+            font-size: 14px;
+            color: var(--fg-2);
+        }
+
+        /* ── Form card ── */
         .card {
-            background: #1e293b;
-            padding: 20px;
-            margin-top: 20px;
-            border-radius: 10px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 28px;
         }
 
-        .high { color: red; }
-        .medium { color: orange; }
-        .low { color: lightgreen; }
+        .field + .field { margin-top: 18px; }
+
+        .field label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--fg);
+            margin-bottom: 6px;
+        }
+
+        .field .label-hint {
+            font-weight: 400;
+            color: var(--fg-3);
+        }
+
+        .field input[type="text"] {
+            display: block;
+            width: 100%;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 9px 12px;
+            font-family: 'SF Mono', 'Cascadia Code', 'Fira Code', monospace;
+            font-size: 12.5px;
+            color: var(--fg);
+            outline: none;
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+
+        .field input[type="text"]:focus {
+            border-color: var(--border-hi);
+            box-shadow: 0 0 0 3px rgba(0,0,0,0.05);
+        }
+
+        .field input::placeholder {
+            color: var(--fg-3);
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* ── Segmented control ── */
+        .seg {
+            display: inline-flex;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 3px;
+            gap: 2px;
+        }
+
+        .seg input[type="radio"] { display: none; }
+
+        .seg label {
+            display: block;
+            padding: 5px 16px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--fg-2);
+            cursor: pointer;
+            border-radius: 6px;
+            margin: 0;
+            transition: background 0.1s, color 0.1s;
+            user-select: none;
+        }
+
+        .seg input[type="radio"]:checked + label {
+            background: var(--surface);
+            color: var(--fg);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 0 0 1px var(--border);
+        }
+
+        /* ── Submit ── */
+        .form-footer {
+            margin-top: 24px;
+            padding-top: 22px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        button[type="submit"] {
+            background: var(--fg);
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            padding: 9px 20px;
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.12s;
+        }
+
+        button[type="submit"]:hover { opacity: 0.85; }
+
+        .form-note {
+            font-size: 12.5px;
+            color: var(--fg-3);
+        }
+
+        /* ── Results ── */
+        .results {
+            margin-top: 40px;
+        }
+
+        .results-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 16px;
+        }
+
+        .results-heading h2 {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
+
+        .results-count {
+            font-size: 13px;
+            color: var(--fg-3);
+        }
+
+        /* ── Finding group ── */
+        .group {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+
+        .group-title {
+            padding: 13px 20px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--fg-2);
+            background: var(--bg);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .group-count {
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0;
+            text-transform: none;
+            color: var(--fg-3);
+        }
+
+        /* ── Finding row ── */
+        .finding {
+            display: flex;
+            align-items: flex-start;
+            gap: 13px;
+            padding: 14px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .finding:last-child { border-bottom: none; }
+
+        .tag {
+            flex-shrink: 0;
+            margin-top: 2px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            padding: 2px 7px;
+            border-radius: 5px;
+            border: 1px solid;
+            white-space: nowrap;
+        }
+
+        .tag-high   { background: var(--tag-high-bg);   border-color: var(--tag-high-bd);   color: var(--tag-high-fg); }
+        .tag-medium { background: var(--tag-medium-bg); border-color: var(--tag-medium-bd); color: var(--tag-medium-fg); }
+        .tag-low    { background: var(--tag-low-bg);    border-color: var(--tag-low-bd);    color: var(--tag-low-fg); }
+        .tag-error  { background: var(--tag-error-bg);  border-color: var(--tag-error-bd);  color: var(--tag-error-fg); }
+        .tag-info   { background: var(--tag-info-bg);   border-color: var(--tag-info-bd);   color: var(--tag-info-fg); }
+
+        .finding-body { flex: 1; min-width: 0; }
+
+        .finding-title {
+            font-size: 13.5px;
+            font-weight: 500;
+            color: var(--fg);
+            line-height: 1.45;
+        }
+
+        .finding-risk {
+            font-size: 12.5px;
+            color: var(--fg-2);
+            margin-top: 3px;
+        }
+
+        .finding-fix {
+            margin-top: 7px;
+            font-size: 12px;
+            color: #047857;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 5px;
+            padding: 3px 9px;
+            display: inline-block;
+        }
+
+        /* ── DAST ── */
+        .dast-inner {
+            padding: 16px 20px;
+        }
+
+        .report-link {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--fg);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            text-decoration-color: var(--border-hi);
+        }
+
+        .report-link:hover { text-decoration-color: var(--fg); }
+
+        /* ── Empty ── */
+        .no-findings {
+            padding: 18px 20px;
+            font-size: 13px;
+            color: var(--fg-3);
+        }
+
+        @media (max-width: 600px) {
+            header { padding: 0 20px; gap: 16px; }
+            .nav-links { display: none; }
+            .page  { padding: 32px 20px 64px; }
+            .card  { padding: 20px; }
+        }
     </style>
 </head>
 <body>
 
-<h1>SecureFlow Dashboard</h1>
+<header>
+    <span class="wordmark">SecureFlow</span>
+    <nav class="nav-links">
+        <a href="/"        class="nav-link active">Scanner</a>
+        <a href="/reports" class="nav-link">Reports</a>
+        <a href="#"        class="nav-link">Docs</a>
+    </nav>
+    <span class="header-right">v1.0</span>
+</header>
 
-<form method="POST">
-    <label>Code Path (for SAST)</label>
-    <input type="text" name="code_path" placeholder="C:\project">
+<div class="page">
 
-    <label>Target URL (for DAST)</label>
-    <input type="text" name="url" placeholder="https://example.com">
+    <div class="page-heading">
+        <h1>Security Scanner</h1>
+        <p>Run static and dynamic analysis against your code or a live target.</p>
+    </div>
 
-    <label>Scan Type</label>
-    <select name="scan_type">
-        <option value="sast">SAST</option>
-        <option value="dast">DAST</option>
-        <option value="both">Both</option>
-    </select>
+    <div class="card">
+        <form method="POST">
+            <div class="field">
+                <label for="code_path">
+                    Code path <span class="label-hint">— for SAST</span>
+                </label>
+                <input type="text" id="code_path" name="code_path" placeholder="/path/to/project">
+            </div>
 
-    <button type="submit">Run Scan</button>
-</form>
+            <div class="field">
+                <label for="url">
+                    Target URL <span class="label-hint">— for DAST</span>
+                </label>
+                <input type="text" id="url" name="url" placeholder="https://example.com">
+            </div>
 
-{% if result %}
+            <div class="field">
+                <label>Scan type</label>
+                <div class="seg">
+                    <input type="radio" name="scan_type" id="t-sast" value="sast" checked>
+                    <label for="t-sast">SAST</label>
+                    <input type="radio" name="scan_type" id="t-dast" value="dast">
+                    <label for="t-dast">DAST</label>
+                    <input type="radio" name="scan_type" id="t-both" value="both">
+                    <label for="t-both">Both</label>
+                </div>
+            </div>
 
-<div class="card">
-    <h2>Results</h2>
+            <div class="form-footer">
+                <button type="submit">Run scan</button>
+                <span class="form-note">May take a few minutes</span>
+            </div>
+        </form>
+    </div>
 
-    {% if result.sast %}
-        <h3>SAST Findings</h3>
-        {% for v in result.sast %}
-            <p><strong>[{{ v.severity }}]</strong> {{ v.message }}</p>
-        {% endfor %}
-    {% endif %}
+    {% if result %}
 
-    {% if result.headers %}
-        <h3>Header Issues</h3>
-        {% for h in result.headers.findings %}
-            <p class="{{ h.severity|lower }}">
-                [{{ h.severity }}] {{ h.header }} - {{ h.risk }}
-            </p>
-        {% endfor %}
-    {% endif %}
+    {% set sast_count   = result.sast | length if result.sast else 0 %}
+    {% set header_count = result.headers.findings | length if result.headers else 0 %}
+    {% set total        = sast_count + header_count %}
 
-    {% if result.dast %}
-        <h3>DAST Report</h3>
-        <a href="{{ result.dast }}" target="_blank">Open ZAP Report</a>
+    <div class="results">
+
+        <div class="results-heading">
+            <h2>Results</h2>
+            <span class="results-count">{{ total }} finding{{ 's' if total != 1 else '' }}</span>
+        </div>
+
+        {% if result.sast %}
+        <div class="group">
+            <div class="group-title">
+                Static analysis
+                <span class="group-count">{{ sast_count }} finding{{ 's' if sast_count != 1 else '' }}</span>
+            </div>
+            {% for v in result.sast %}
+            <div class="finding">
+                <span class="tag tag-{{ v.severity | lower }}">{{ v.severity }}</span>
+                <div class="finding-body">
+                    <div class="finding-title">{{ v.message }}</div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if result.headers %}
+        <div class="group">
+            <div class="group-title">
+                HTTP headers
+                <span class="group-count">{{ header_count }} finding{{ 's' if header_count != 1 else '' }}</span>
+            </div>
+            {% for h in result.headers.findings %}
+            <div class="finding">
+                <span class="tag tag-{{ h.severity | lower }}">{{ h.severity }}</span>
+                <div class="finding-body">
+                    <div class="finding-title">{{ h.header }}</div>
+                    <div class="finding-risk">{{ h.risk }}</div>
+                    {% if h.recommendation %}
+                    <span class="finding-fix">Fix &mdash; {{ h.recommendation }}</span>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if result.dast and result.dast.report_path %}
+        <div class="group">
+            <div class="group-title">DAST report</div>
+            <div class="dast-inner">
+                <a class="report-link" href="{{ result.dast.report_path }}" target="_blank">Open ZAP report &rarr;</a>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if not result.sast and not result.headers and not result.dast %}
+        <div class="group">
+            <p class="no-findings">No findings returned for this scan.</p>
+        </div>
+        {% endif %}
+
+    </div>
     {% endif %}
 
 </div>
-
-{% endif %}
-
 </body>
 </html>

@@ -1,4 +1,5 @@
 import datetime
+import os
 
 def generate_report_data(semgrep_results, zap_report_path):
 
@@ -41,9 +42,11 @@ def generate_report_data(semgrep_results, zap_report_path):
     return report
 
 
-def generate_text_report(report, code_path, url):
+def generate_text_report(report, code_path, url, output_dir=None):
     ts = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
     fname = f"report_{ts}.txt"
+    if output_dir:
+        fname = os.path.join(output_dir, fname)
 
     lines = []
     lines.append("=== SecureFlow Security Report ===\n")
