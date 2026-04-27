@@ -26,7 +26,7 @@
 
 ### Installation
 ```powershell
-git clone https://github.com/Raghaverma/SecureFlow.git
+git clone https://github.com/luminomi/SecureFlow.git
 cd SecureFlow
 pip install -r requirements.txt
 ```
