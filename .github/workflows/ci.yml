@@ -1,0 +1,49 @@
+name: SecureFlow CI
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+permissions:
+  contents: read
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11"]
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
+
+      - name: Install Lint Tools
+        run: pip install flake8
+
+      - name: Run Lint
+        run: flake8 backend/ frontend/ --max-line-length=120 --ignore=E501,W503 || true
+
+      - name: Run Tests
+        run: |
+          if [ -d tests ]; then
+            pip install pytest
+            pytest tests/ -v
+          else
+            echo "No tests directory found — skipping"
+          fi
