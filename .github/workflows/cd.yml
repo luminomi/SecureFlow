@@ -1,0 +1,28 @@
+name: SecureFlow CD
+
+on:
+  workflow_run:
+    workflows:
+      - SecureFlow CI
+    branches:
+      - main
+    types:
+      - completed
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Deploy to Render
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    steps:
+      - name: Trigger Render Deploy
+        run: |
+          curl --silent --show-error --fail \
+            -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
+
+      - name: Deployment Triggered
+        run: echo "Deploy triggered successfully. Monitor at https://dashboard.render.com"
