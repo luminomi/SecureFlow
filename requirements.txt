@@ -1,6 +1,6 @@
 requests>=2.25.1
 urllib3>=1.26.5
-semgrep>=1.0.0
+semgrep>=1.162.0
 Flask>=2.0.0
 gunicorn>=21.2.0
 
